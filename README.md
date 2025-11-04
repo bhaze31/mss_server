@@ -1,4 +1,4 @@
-# MSS Server
+# Mile Square Sweeping Server
 
 A Swift Vapor web server with SQLite database for managing contact form submissions, landing page, and privacy policy.
 
