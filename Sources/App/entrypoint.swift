@@ -6,18 +6,16 @@ import Logging
 enum Entrypoint {
     static func main() async throws {
         var env = try Environment.detect()
-        try LoggingSystem.bootstrap(from: &env)
+            try LoggingSystem.bootstrap(from: &env)
 
-        let app = Application(env)
-        defer { app.shutdown() }
-
-        do {
-            try await configure(app)
-        } catch {
-            app.logger.report(error: error)
-            throw error
-        }
-
-        try await app.execute()
+            let app = try await Application.make(env)
+            do {
+                try await configure(app)
+                try await app.execute()
+                try await app.asyncShutdown()
+            } catch {
+                try? await app.asyncShutdown()
+                throw error
+            }
     }
 }
